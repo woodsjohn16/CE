@@ -3,6 +3,7 @@ import { useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { makeSelectForms } from '../redux/home/selector/formSelector'
 import { getForms } from '../redux/home/actions/formActions'
+import FormInputs from '../components/formsInputs/formInputs'
 // import Link from 'next/link'
 import Image from 'next/image'
 import loader from '../assets/images/loader.svg'
@@ -15,7 +16,6 @@ const Home = () => {
   const [submitted, setSubmitted] = useState(false)
 
   useEffect(() => {
-    console.log(inputData)
     dispatch(getForms())
   }, [])
 
@@ -34,45 +34,45 @@ const Home = () => {
     })
   }
 
-  const renderElements = (form, key) => {
-    switch (form.type) {
-      case 'field':
-        return React.createElement(
-          'div',
-          {
-            className: 'input-form',
-            key: key,
-          },
-          React.createElement('label', null, `${form.label.en}`),
-          React.createElement('input', {
-            id: form.label.en,
-            name: form.input,
-            type: form.input === 'datepicker' ? 'date' : form.input,
-            onChange: (e) => changeInputHandler(e),
-          }),
-        )
-      case 'paragraph':
-        return React.createElement(
-          'p',
-          {
-            name: form.input,
-            key: key,
-          },
-          form.text.en,
-        )
-      case 'header':
-        return React.createElement(
-          form.type,
-          {
-            onChange: (e) => changeInputHandler(e),
-            key: key,
-          },
-          form.text.en,
-        )
-      default:
-        return React.createElement('div', { key: key }, '')
-    }
-  }
+  // const renderElements = (form, key) => {
+  //   switch (form.type) {
+  //     case 'field':
+  //       return React.createElement(
+  //         'div',
+  //         {
+  //           className: 'input-form',
+  //           key: key,
+  //         },
+  //         React.createElement('label', null, `${form.label.en}`),
+  //         React.createElement('input', {
+  //           id: form.label.en,
+  //           name: form.input,
+  //           type: form.input === 'datepicker' ? 'date' : form.input,
+  //           onChange: (e) => changeInputHandler(e),
+  //         }),
+  //       )
+  //     case 'paragraph':
+  //       return React.createElement(
+  //         'p',
+  //         {
+  //           name: form.input,
+  //           key: key,
+  //         },
+  //         form.text.en,
+  //       )
+  //     case 'header':
+  //       return React.createElement(
+  //         form.type,
+  //         {
+  //           onChange: (e) => changeInputHandler(e),
+  //           key: key,
+  //         },
+  //         form.text.en,
+  //       )
+  //     default:
+  //       return React.createElement('div', { key: key }, '')
+  //   }
+  // }
 
   const submitForm = () => {
     console.log(inputData)
@@ -90,7 +90,13 @@ const Home = () => {
               <div className="confirm-message">Submitted Successfully</div>
             )}
             {forms.length > 0 &&
-              forms.map((form, idx) => renderElements(form, idx))}
+              forms.map((form, idx) => (
+                <FormInputs
+                  key={idx}
+                  form={form}
+                  onChangeHandler={(e) => changeInputHandler(e)}
+                />
+              ))}
             <button onClick={submitForm} className="submit-button">
               Submit
             </button>
